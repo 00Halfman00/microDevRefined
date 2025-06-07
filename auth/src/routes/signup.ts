@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 const router = express.Router();
+import { RequestValidationError } from '../errors/request-validation-errors';
+import { DatabaseConnectionError } from '../errors/database-connection-error';
 
 router.post(
   '/api/users/signup',
@@ -15,8 +17,12 @@ router.post(
     console.log('singup');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send(errors.array());
+      // throw new Error('Invalid email or password caught in signup.ts'); when just passing generic error
+      // return res.status(400).send(errors.array());  when sending simple response
+      throw new RequestValidationError(errors.array());
     }
+    // throw new Error('Error connecting to database.');  when just passing generic error
+    throw new DatabaseConnectionError();
     const { email, password } = req.body;
     const user = { email, password };
     res.send(user);
