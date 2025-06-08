@@ -13,7 +13,7 @@ router.post(
       .isLength({ min: 8, max: 20 })
       .withMessage('Password must be between 8 and 20 characters.'),
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     console.log('singup');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
