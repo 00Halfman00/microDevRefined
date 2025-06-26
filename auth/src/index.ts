@@ -32,12 +32,12 @@ const startServers = async () => {
       'mongodb://auth-mongo-clusterip-srv:27017/auth-db'
     );
     console.log('auth-db SERVER listening on port 27017');
-    const user = User.build({
-      email: 'one@one.com',
-      password: 'onetwothree',
-    });
+    // const user = User.build({
+    //   email: 'one@one.com',
+    //   password: 'onetwothree',
+    // });
 
-    console.log('user: ', user);
+    // console.log('user: ', user);
 
     app.listen(3000, () => {
       console.log('auth SERVER listening on port 3000');

@@ -2,7 +2,8 @@ import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 const router = express.Router();
 import { RequestValidationError } from '../errors/request-validation-errors';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
+import { BadRequestError } from '../errors/bad-request-error';
+import { User } from '../models/user';
 
 router.post(
   '/api/users/signup',
@@ -14,18 +15,22 @@ router.post(
       .withMessage('Password must be between 8 and 20 characters.'),
   ],
   async (req: Request, res: Response) => {
-    console.log('singup');
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
-      // throw new Error('Invalid email or password caught in signup.ts'); when just passing generic error
-      // return res.status(400).send(errors.array());  when sending simple response
       throw new RequestValidationError(errors.array());
     }
-    // throw new Error('Error connecting to database.');  when just passing generic error
-    throw new DatabaseConnectionError();
+
     const { email, password } = req.body;
-    const user = { email, password };
-    res.send(user);
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      throw new BadRequestError('User alredy exist in database');
+    }
+
+    const user = User.build({ email, password });
+    await user.save();
+    res.status(201).send(user);
   }
 );
 
