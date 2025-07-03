@@ -9,7 +9,7 @@ spec:
   tls:
     - hosts:
         - tickets.dev
-      secretName: some_secret
+      secretName: tickets-dev-tls-secret
   rules:
     - host: tickets.dev
       http:
