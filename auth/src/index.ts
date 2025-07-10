@@ -9,8 +9,9 @@ const startServers = async () => {
     const db = await mongoose.connect(
       'mongodb://auth-mongo-clusterip-srv:27017/auth-db'
     );
+    console.log('process.env.JWT_KEY: ', process.env.JWT_KEY);
     console.log('auth-db SERVER listening on port 27017');
-    console.log('to test live reloading');
+    console.log('LIVE RELOADING!');
     app.listen(3000, () => {
       console.log('auth SERVER listening on port 3000');
     });
