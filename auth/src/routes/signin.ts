@@ -12,7 +12,7 @@ router.post(
   '/api/users/signin',
   [
     body('email').isEmail().withMessage('Email must be a valid email'),
-    body('password').trim().notEmpty(),
+    body('password').trim().notEmpty().withMessage('password cannot be empty'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -43,7 +43,7 @@ router.post(
       jwt: userJWT,
     };
 
-    res.send({ user: existingUser });
+    res.send(existingUser);
   }
 );
 

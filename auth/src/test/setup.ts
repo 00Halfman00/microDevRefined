@@ -4,6 +4,7 @@ import { app } from '../app';
 
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
+  process.env.JWT_KEY = 'willi wanka and the umpa lumpas';
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
 
@@ -19,9 +20,9 @@ beforeEach(async () => {
   }
 });
 
-// afterAll(async () => {
-//   if (mongo) {
-//     await mongo.stop();
-//   }
-//   await mongoose.connection.close();
-// });
+afterAll(async () => {
+  if (mongo) {
+    await mongo.stop();
+  }
+  await mongoose.connection.close();
+});

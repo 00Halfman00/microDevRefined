@@ -1,26 +1,32 @@
+// import libraries
 import express from 'express';
-import { json } from 'body-parser';
 import 'express-async-errors';
 import cookieSession from 'cookie-session';
-// testing db
-import { User } from './models/user';
 
-// route handlers
+// import route handlers
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
 import { signupRouter } from './routes/signup';
 import { signoutRouter } from './routes/signout';
 import { NotFoundRouter } from './routes/route-not-found';
-// error handler
+// import error handler middleware
 import { errorHandler } from './middlewares/error-handler';
+// import middleware for parsing JSON request bodies
+import { json } from 'body-parser';
 
+// create variable, instantiating it as an Express application object
 const app = express();
+// Configure Express to trust proxy headers (essential when deployed behind a load balancer/ingress)
 app.set('trust proxy', true);
+// Enable JSON body parsing for incoming requests
 app.use(json());
+// Configure cookie-based session management for JWT storage
 app.use(
   cookieSession({
+    // Do not sign the cookie (JWT inside is signed already)
     signed: false,
-    secure: true,
+    // Only set 'secure: true' in production (requires HTTPS); disable for local 'test' environment
+    secure: process.env.NODE_ENV !== 'test',
   })
 );
 
@@ -30,7 +36,9 @@ app.use(signinRouter);
 app.use(signupRouter);
 app.use(signoutRouter);
 app.use(NotFoundRouter);
-// use error handler
+
+// use global error handler middleware
 app.use(errorHandler);
 
+// make Express app available to other modules (e.g., tests or server startup)
 export { app };
