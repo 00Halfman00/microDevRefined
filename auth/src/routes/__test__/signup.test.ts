@@ -38,13 +38,9 @@ it('returns 400 on a signup with an invalid email', async () => {
 });
 
 it('returns 400 on a signup with an existing email', async () => {
-  await request(app)
-    .post('/api/users/signup')
-    .send({
-      email: 'three@one.com',
-      password: 'onetwothree',
-    })
-    .expect(201);
+  const email = 'three@one.com';
+  const password = 'onetwothree';
+  await signupAndGetCookie(email, password);
 
   const response = await request(app)
     .post('/api/users/signup')
@@ -55,9 +51,7 @@ it('returns 400 on a signup with an existing email', async () => {
     .expect(400);
 
   expect(response.body.errors).toBeDefined();
-  expect(response.body.errors[0].message).toEqual(
-    'User alredy exist in database'
-  );
+  expect(response.body.errors[0].message).toEqual('Email already in use');
 });
 
 it('returns 400 because password is invalid', async () => {

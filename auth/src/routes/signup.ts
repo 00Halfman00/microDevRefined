@@ -21,7 +21,7 @@ router.post(
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      throw new BadRequestError('User alredy exist in database');
+      throw new BadRequestError('Email already in use');
     }
 
     const user = User.build({ email, password });

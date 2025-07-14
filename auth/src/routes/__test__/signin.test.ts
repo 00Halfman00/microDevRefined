@@ -5,13 +5,7 @@ import jwt from 'jsonwebtoken';
 it('returns a 200 on a successful signin', async () => {
   const email = 'one@one.com';
   const password = 'onetwothree';
-  await request(app)
-    .post('/api/users/signup')
-    .send({
-      email,
-      password,
-    })
-    .expect(201);
+  await signupAndGetCookie(email, password);
 
   const responseSignin = await request(app)
     .post('/api/users/signin')
@@ -43,7 +37,6 @@ it('returns a 200 on a successful signin', async () => {
     Buffer.from(sessionCookieString, 'base64').toString('utf8')
   );
 
-  console.log(decodedSession);
   const decodedJwt = jwt.verify(
     decodedSession.jwt,
     process.env.JWT_KEY!
@@ -84,13 +77,7 @@ it('returns 400 on a signin with a nonexisting email', async () => {
 it('returns 400 because password is invalid', async () => {
   const email = 'four@one.com';
   const password = 'onetwothree';
-  await request(app)
-    .post('/api/users/signup')
-    .send({
-      email,
-      password,
-    })
-    .expect(201);
+  await signupAndGetCookie(email, password);
 
   const responseShort = await request(app)
     .post('/api/users/signin')
@@ -116,13 +103,7 @@ it('returns 400 because password is invalid', async () => {
 it('returns 400 because email/password is missing', async () => {
   const email = 'five@one.com';
   const password = 'onetwothree';
-  await request(app)
-    .post('/api/users/signup')
-    .send({
-      email,
-      password,
-    })
-    .expect(201);
+  await signupAndGetCookie(email, password);
 
   const responseNoEmail = await request(app)
     .post('/api/users/signin')
