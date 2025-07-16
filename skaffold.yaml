@@ -14,7 +14,15 @@ build:
       sync:
         manual:
           - src: 'src/**/*.ts'
-            dest: 'app/src'
+            dest: '.'
+    - image: name/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: '.'
 # # Highly recommended for local development of web applications
 # # This will forward traffic from your local machine to your running service in Kubernetes
 # portForward:

@@ -47,7 +47,9 @@ global.signupAndGetCookie = async (email, password) => {
   const userCookie = response.get('Set-Cookie') as string[];
 
   if (!userCookie || !Array.isArray(userCookie) || !userCookie.length) {
-    throw new Error('global.signup: Set-Cookie header missing or empty.');
+    throw new Error(
+      'global.signupAndGetCookie: Set-Cookie header missing or empty.'
+    );
   }
   const userId = response.body.id;
   const userEmail = response.body.email;
