@@ -18,7 +18,7 @@ const startServers = async () => {
       'mongodb://auth-mongo-clusterip-srv:27017/auth-db'
     );
     console.log('auth-db SERVER listening on port 27017');
-    console.log('TESTING LIVE RELOADING FOR JIZZA MY NIZZA!');
+    console.log('TESTING LIVE RELOADING!!');
     // register with the Node.js Event Loop on that port. On incoming request,
     // schedule the appropriate callback (your Express app's handler) to be executed.
     app.listen(3000, () => {

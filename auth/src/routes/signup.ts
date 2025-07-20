@@ -18,6 +18,7 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
+    console.log('Received signup request:', { email, password });
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {

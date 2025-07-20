@@ -2,6 +2,7 @@
 import express from 'express';
 import 'express-async-errors';
 import cookieSession from 'cookie-session';
+//import cors from 'cors';
 
 // import route handlers
 import { currentUserRouter } from './routes/current-user';
@@ -16,9 +17,12 @@ import { json } from 'body-parser';
 
 // create variable, instantiating it as an Express application object
 const app = express();
-// Configure Express to trust proxy headers (essential when deployed behind a load balancer/ingress)
+// Enable CORS for all routes (consider restricting this in production)
+// How would you restrict CORS in production?
+// app.use(cors());
+// Trust the proxy to handle forwarded headers (important for secure cookies)
 app.set('trust proxy', true);
-// Enable JSON body parsing for incoming requests
+// Parse incoming JSON request bodies
 app.use(json());
 // Configure cookie-based session management for JWT storage
 app.use(

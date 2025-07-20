@@ -1,5 +1,7 @@
-# Use a Node.js base image suitable for development
 FROM node:18-alpine
+
+# Install common debugging tools for dev environment (remove in production  )
+RUN apk add --no-cache curl iputils-ping # iputils-ping for 'ping' command
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -8,10 +10,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all dependencies, including devDependencies
-RUN npm install
+RUN npm install --omit=dev
 
 # Copy the rest of the application's source code
 COPY . .
 
 # The command to start the Next.js development server
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
