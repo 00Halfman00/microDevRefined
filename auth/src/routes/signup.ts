@@ -1,10 +1,14 @@
+// import third-party modules/libraries
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { body } from 'express-validator';
-const router = express.Router();
+// import local middlewares
 import { BadRequestError } from '../errors/bad-request-error';
 import { validateRequest } from '../middlewares/validate-request';
 import { User } from '../models/user';
+
+// create a new Express router instance
+const router = express.Router();
 
 router.post(
   '/api/users/signup',
@@ -18,7 +22,6 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    console.log('Received signup request:', { email, password });
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -45,3 +48,11 @@ router.post(
 );
 
 export { router as signupRouter };
+
+// This router will handle the signup route for user registration
+// It will validate the request body, check for existing users, create a new user, and
+// issue a JWT token for the newly registered user
+// The router will be exported for use in the main application file
+// This file is responsible for handling user signup requests
+// and will be mounted on the '/api/users/signup' path in the main app file.
+// The router will respond with the created user object or an error if any validation fails.

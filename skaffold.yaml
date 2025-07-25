@@ -15,60 +15,18 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: '.'
-    - image: nameclient
+    - image: name/client
       context: client
       docker:
         dockerfile: Dockerfile.dev
       sync:
         manual:
-          - src: '**/*.js'
-            dest: '.'
-          - src: '**/*.jsx'
-            dest: '.'
-          - src: '**/*.ts'
-            dest: '.'
-          - src: '**/*.tsx'
-            dest: '.'
-          - src: '**/*.css'
-            dest: '.'
-          - src: '**/*.scss'
-            dest: '.'
-          - src: '**/*.json'
-            dest: '.'
+          - src: '**/*.{js,jsx,ts,tsx,css,scss,json}'
+            dest: .
           - src: 'next.config.js'
-            dest: '.'
-          - src: 'pages/**/*.js'
-            dest: '.'
+            dest: .
           - src: 'public/**/*'
-            dest: '.'
-          - src: 'src/**/*.js'
-            dest: '.'
-          - src: 'src/**/*.jsx'
-            dest: '.'
-          - src: 'src/**/*.ts'
-            dest: '.'
-          - src: 'src/**/*.tsx'
-            dest: '.'
-          - src: 'src/**/*.css'
-            dest: '.'
-          - src: 'src/**/*.scss'
-            dest: '.'
-          - src: 'src/**/*.json'
-            dest: '.'
-          - src: 'components/**/*.js'
-            dest: '.'
-          - src: 'components/**/*.jsx'
-            dest: '.'
-          - src: 'components/**/*.ts'
-            dest: '.'
-          - src: 'components/**/*.tsx'
-            dest: '.'
-          - src: 'components/**/*.css'
-            dest: '.'
-          - src: 'components/**/*.scss'
-            dest: '.'
-          - src: 'components/**/*.json'
-            dest: '.'
+            dest: .
 # portForward:
 #   - resourceType: Deployment
 #     resourceName: client-depl
