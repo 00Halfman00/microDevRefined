@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function useRequest({ url, method, setLoading }) {
+function useRequest({ url, method, setLoading, onSuccess }) {
   const [authErrors, setAuthErrors] = useState([]);
 
   const sendRequest = async (requestBody) => {
@@ -36,8 +36,12 @@ function useRequest({ url, method, setLoading }) {
       if (!response.data) {
         throw new Error('No data received'); // Handle case where response is empty
       }
-      if (setLoading) setLoading(false);
-      return response.data;
+      if (setLoading) {
+        setLoading(false);
+      }
+      if (onSuccess) {
+        onSuccess(response.data);
+      }
     } catch (err) {
       if (setLoading) setLoading(false);
       if (err.response && err.response.data && err.response.data.errors) {
