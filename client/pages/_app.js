@@ -1,10 +1,45 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import buildClient from '../lib/buildClient';
+import Header from '../components/header';
+import '../styles/header.css';
 
-function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+function AppComponent({ Component, pageProps, currentUser }) {
+  return (
+    <div>
+      <Header currentUser={currentUser} />
+      <Component currentUser={currentUser} {...pageProps} />
+    </div>
+  );
 }
 
-export default App;
+AppComponent.getInitialProps = async (appContext) => {
+  const client = buildClient(appContext.ctx);
+  let currentUser = null;
+  try {
+    const { data } = await client.get('/api/current-user');
+    currentUser = data.currentUser;
+  } catch (err) {
+    console.log(
+      'Error fetching current user in _app.js, user is not signed in'
+    );
+  }
+
+  let pageProps = {};
+  if (appContext.Component.getInitialProps) {
+    pageProps = await appContext.Component.getInitialProps(
+      appContext.ctx,
+      client,
+      currentUser
+    );
+  }
+
+  return {
+    pageProps,
+    currentUser,
+  };
+};
+
+export default AppComponent;
 
 // This is the custom App component for a Next.js application.
 // It imports Bootstrap CSS for styling and renders the main component with its props.

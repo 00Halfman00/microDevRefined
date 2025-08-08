@@ -1,18 +1,17 @@
-'use client';
 // --- import third-party modules/libraries ---
 import { useState } from 'react';
 // --- import local hook ---
 import useRequest from '../../hooks/use-request';
 import { useRouter } from 'next/navigation';
 
-function Signup() {
+function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [clientErrors, setClientErrors] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
   const router = useRouter();
   const { authErrors, setAuthErrors, sendRequest } = useRequest({
-    url: '/api/users/signup',
+    url: '/api/users/signin',
     method: 'POST',
     setLoading: setIsFormValid,
     onSuccess: () => {
@@ -58,7 +57,7 @@ function Signup() {
   // --- Return JSX to render the signup form ---
   return (
     <div className="container">
-      <h1>Sign Up</h1>
+      <h1>Sign In</h1>
       <form onSubmit={validateAndHandleSubmit}>
         <div className="form-group">
           <label htmlFor="email" className="form-label">
@@ -67,7 +66,9 @@ function Signup() {
           <input
             className="form-control"
             id="email"
+            name="email"
             placeholder="Enter email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -80,7 +81,9 @@ function Signup() {
             type="password"
             className="form-control"
             id="password"
-            placeholder="Enter password"
+            name="password"
+            placeholder="password"
+            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -91,7 +94,7 @@ function Signup() {
             className="btn btn-primary"
             disabled={isFormValid || !email || !password}
           >
-            Sign Up
+            Sign In
           </button>
           {clientErrors.length > 0 && (
             <div className="alert alert-danger mt-3">
@@ -117,4 +120,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Signin;
