@@ -37,3 +37,6 @@ yarn-error.log*
 .classpath
 *.sublime-project
 *.sublime-workspace
+
+# Ignore the common library directory to treat it as a separate Git repo.
+/common/
