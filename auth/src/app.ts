@@ -1,6 +1,5 @@
 // import third-party libraries/modules
 import express from 'express';
-import 'express-async-errors';
 import cookieSession from 'cookie-session';
 
 // import route handlers
@@ -10,7 +9,7 @@ import { signupRouter } from './routes/signup';
 import { signoutRouter } from './routes/signout';
 import { NotFoundRouter } from './routes/route-not-found';
 // import error handler middleware
-import { errorHandler } from './middlewares/error-handler';
+import { errorHandler } from '@00tickets00/common';
 // import middleware for parsing JSON request bodies
 import { json } from 'body-parser';
 
@@ -36,7 +35,7 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signupRouter);
 app.use(signoutRouter);
-app.use(NotFoundRouter);
+// app.use(NotFoundRouter);
 
 // use global error handler middleware
 app.use(errorHandler);

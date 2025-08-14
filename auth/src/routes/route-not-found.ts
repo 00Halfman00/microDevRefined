@@ -1,6 +1,5 @@
 import express from 'express';
-import 'express-async-errors';
-import { NotFoundError } from '../errors/not-found-error';
+import { NotFoundError } from '@00tickets00/common';
 
 const router = express.Router();
 
