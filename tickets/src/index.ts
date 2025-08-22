@@ -12,21 +12,21 @@ const startServers = async () => {
     throw new Error('JWT_KEY must be defined');
   }
   if (!process.env.MONGO_URI) {
-    throw new Error('AUTH_URI must be defined');
+    throw new Error('MONGO_URI must be defined');
   }
   try {
     // Connect to MongoDB database; this asynchronous operation registers
     // database interactions with the Node.js Event Loop.
     const db = await mongoose.connect(process.env.MONGO_URI);
-    console.log('auth-db SERVER listening on port 27017');
+    console.log('tickets-mongo DB SERVER listening on port 27017');
     console.log('TESTING LIVE RELOADING!!');
     // register with the Node.js Event Loop on that port. On incoming request,
     // schedule the appropriate callback (your Express app's handler) to be executed.
     app.listen(3000, () => {
-      console.log('auth SERVER listening on port 3000');
+      console.log('tickets SERVER listening on port 3000');
     });
   } catch (err) {
-    console.error('Error starting auth and auth-db SERVERS', err);
+    console.error('Error starting tickets and tickets-mongo SERVERS', err);
     // Optionally, exit the process if a critical startup component fails
     process.exit(1);
   }

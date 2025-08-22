@@ -27,6 +27,14 @@ build:
             dest: .
           - src: 'public/**/*'
             dest: .
+    - image: name/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: '.'
 # portForward:
 #   - resourceType: Deployment
 #     resourceName: client-depl
