@@ -1,5 +1,6 @@
 // import third-party libraries/modules
 import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import cookieSession from 'cookie-session';
 
 // import route handlers
@@ -7,9 +8,9 @@ import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
 import { signupRouter } from './routes/signup';
 import { signoutRouter } from './routes/signout';
-import { NotFoundRouter } from './routes/route-not-found';
 // import error handler middleware
-import { errorHandler } from '@00tickets00/common';
+import { errorHandler, NotFoundError } from '@00tickets00/common';
+console.log('auth/src/app.ts: Importing NotFoundError: ', NotFoundError);
 // import middleware for parsing JSON request bodies
 import { json } from 'body-parser';
 
@@ -30,14 +31,22 @@ app.use(
   })
 );
 
-// use route handlers
+// register route handlers
 app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signupRouter);
 app.use(signoutRouter);
-// app.use(NotFoundRouter);
 
-// use global error handler middleware
+// Handle all other routes
+app.all(
+  '/{*splat}',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const notFoundError = new NotFoundError();
+    next(notFoundError);
+  }
+);
+
+// Use global error handler middleware
 app.use(errorHandler);
 
 // make Express app available to other modules (e.g., tests or server startup)

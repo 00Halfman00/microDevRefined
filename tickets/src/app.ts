@@ -2,8 +2,11 @@
 import express from 'express';
 import cookieSession from 'cookie-session';
 
+// import route handlers
+import { newTicketRouter } from './routes/new';
+
 // import error handler middleware
-import { errorHandler } from '@00tickets00/common';
+import { errorHandler, NotFoundError, CurrentUser } from '@00tickets00/common';
 // import middleware for parsing JSON request bodies
 import { json } from 'body-parser';
 
@@ -24,7 +27,15 @@ app.use(
   })
 );
 
-// app.use(NotFoundRouter);
+// Register route handlers
+app.use(CurrentUser);
+app.use(newTicketRouter);
+
+// Handle all other routes
+app.all('{*splat}', async (req, res, next) => {
+  const notFoundError = new NotFoundError();
+  next(notFoundError);
+});
 
 // use global error handler middleware
 app.use(errorHandler);
