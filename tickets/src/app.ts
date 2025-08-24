@@ -4,6 +4,9 @@ import cookieSession from 'cookie-session';
 
 // import route handlers
 import { newTicketRouter } from './routes/new';
+import { showTicketRouter } from './routes/show';
+import { indexTicketsRouter } from './routes';
+import { updateTicketRouter } from './routes/update';
 
 // import error handler middleware
 import { errorHandler, NotFoundError, CurrentUser } from '@00tickets00/common';
@@ -30,6 +33,9 @@ app.use(
 // Register route handlers
 app.use(CurrentUser);
 app.use(newTicketRouter);
+app.use(showTicketRouter);
+app.use(indexTicketsRouter);
+app.use(updateTicketRouter);
 
 // Handle all other routes
 app.all('{*splat}', async (req, res, next) => {
