@@ -13,9 +13,9 @@ export abstract class Listener<T extends Event> {
   abstract queueGroupName: string;
   abstract onMessage(data: T['data'], msg: Message): void;
 
-  constructor(client: Stan) {
+  constructor(client: Stan, ackWait = 5 * 1000) {
     this.client = client;
-    this.ackWait = 5 * 1000; // 5 seconds
+    this.ackWait = ackWait;
   }
 
   protected ackMessage(msg: Message) {
@@ -43,9 +43,12 @@ export abstract class Listener<T extends Event> {
         `\nMessage # ${msg.getSequence()} \n`,
         `Received message: ${this.subject} with queue group name: ${this.queueGroupName}`
       );
-
-      const parsedData = this.parseMessage(msg);
-      this.onMessage(parsedData, msg);
+      try {
+        const parsedData = this.parseMessage(msg);
+        this.onMessage(parsedData, msg);
+      } catch (err) {
+        console.error('Failed to parse message:', err);
+      }
     });
   }
 
