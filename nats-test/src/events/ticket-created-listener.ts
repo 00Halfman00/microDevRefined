@@ -7,7 +7,7 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
   readonly subject = Subjects.TicketCreated;
   queueGroupName: string = 'payments-service';
 
-  onMessage(data: any, msg: Message) {
+  onMessage(data: TicketCreatedEvent['data'], msg: Message) {
     console.log(`Processing ticket: ${JSON.stringify(data)}`);
     msg.ack();
   }

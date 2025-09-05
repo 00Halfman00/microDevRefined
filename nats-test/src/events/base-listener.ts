@@ -1,6 +1,5 @@
 import { Message, Stan } from 'node-nats-streaming';
 import { Subjects } from './subjects';
-import { TicketCreatedEvent } from './ticket-created-event';
 
 interface Event {
   subject: Subjects;
@@ -41,6 +40,7 @@ export abstract class Listener<T extends Event> {
 
     subscription.on('message', (msg: Message) => {
       console.log(
+        `\nMessage # ${msg.getSequence()} \n`,
         `Received message: ${this.subject} with queue group name: ${this.queueGroupName}`
       );
 
