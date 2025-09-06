@@ -2,6 +2,7 @@
 import { app } from './app';
 // import database library
 import mongoose from 'mongoose';
+import { natsWrapper } from '../nats-wrapper';
 
 // NOTE:  The Node.js process itself always has an Event Loop running.
 // It's the core mechanism that allows Node.js to handle asynchronous operations.
@@ -15,19 +16,25 @@ const startServers = async () => {
     throw new Error('MONGO_URI must be defined');
   }
   try {
-    // Connect to MongoDB database; this asynchronous operation registers
-    // database interactions with the Node.js Event Loop.
+    process.on('SIGINT', () => natsWrapper.close());
+    process.on('SIGTERM', () => natsWrapper.close());
+    process.on('SIGQUIT', () => natsWrapper.close());
+
     const db = await mongoose.connect(process.env.MONGO_URI);
     console.log('tickets-mongo DB SERVER listening on port 27017');
-    console.log('TESTING LIVE RELOADING!!');
-    // register with the Node.js Event Loop on that port. On incoming request,
-    // schedule the appropriate callback (your Express app's handler) to be executed.
+
+    await natsWrapper.connect('tickets', 'http://nats-clusterip-srv:4222');
+
+    natsWrapper.client.on('close', () => {
+      console.log('NATS connection closed!');
+      process.exit();
+    });
+
     app.listen(3000, () => {
       console.log('tickets SERVER listening on port 3000');
     });
   } catch (err) {
     console.error('Error starting tickets and tickets-mongo SERVERS', err);
-    // Optionally, exit the process if a critical startup component fails
     process.exit(1);
   }
 };
