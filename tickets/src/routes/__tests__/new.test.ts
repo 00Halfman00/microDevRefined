@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/tickets';
+import { natsWrapper } from '../../nats-wrapper';
 
 describe('POST /api/tickets', () => {
   it('route listens to /api/tickets for new ticket creation', async () => {
@@ -85,5 +86,20 @@ describe('POST /api/tickets', () => {
     expect(tickets.length).toEqual(1);
     expect(tickets[0].title).toEqual('Test Ticket');
     expect(tickets[0].price).toEqual(35.99);
+  });
+});
+
+// Added test to verify event publishing
+describe('POST /api/tickets', () => {
+  it('publishes an event after ticket creation', async () => {
+    await request(app)
+      .post('/api/tickets')
+      .set('Cookie', global.signupGetCookie())
+      .send({
+        title: 'Test Ticket',
+        price: 35.99,
+      })
+      .expect(201);
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });

@@ -4,6 +4,8 @@ import { app } from '../app';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 
+jest.mock('../nats-wrapper');
+
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
   process.env.JWT_KEY = 'willi wanka and the umpa lumpas';
@@ -14,6 +16,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  jest.clearAllMocks();
   if (mongoose.connection.db) {
     const collections = await mongoose.connection.db.collections();
     for (let collection of collections) {

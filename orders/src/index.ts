@@ -30,7 +30,7 @@ const startServers = async () => {
     process.on('SIGQUIT', () => natsWrapper.close());
 
     const db = await mongoose.connect(process.env.MONGO_URI);
-    console.log('tickets-mongo DB SERVER listening on port 27017');
+    console.log('orders-mongo DB SERVER listening on port 27017');
 
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,
@@ -44,7 +44,7 @@ const startServers = async () => {
     });
 
     app.listen(3000, () => {
-      console.log('tickets SERVER listening on port 3000');
+      console.log('orders SERVER listening on port 3000');
     });
   } catch (err) {
     console.error('Error starting tickets and tickets-mongo SERVERS', err);

@@ -1,0 +1,19 @@
+FROM node:18-alpine
+
+# Install common debugging tools for dev environment (remove in production  )
+RUN apk add --no-cache curl iputils-ping # iputils-ping for 'ping' command
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to leverage Docker cache
+COPY package*.json ./
+
+# Install all dependencies, including devDependencies
+RUN npm install --omit=dev
+
+# Copy the rest of the application's source code
+COPY . .
+
+# The command to start the Next.js development server
+CMD ["npm", "start"]

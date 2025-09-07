@@ -35,16 +35,24 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: '.'
+    - image: name/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: '.'
 # portForward:
 #   - resourceType: Deployment
-#     resourceName: client-depl
+#     resourcename: client-depl
 #     port: 3000
 #     localPort: 3000
 # # Highly recommended for local development of web applications
 # # This will forward traffic from your local machine to your running service in Kubernetes
 # portForward:
 #   - resourceType: Service
-#     resourceName: auth-clusterip-srv # The name of your authentication service
+#     resourcename: auth-clusterip-srv # The name of your authentication service
 #     namespace: default # Assuming your service is in the 'default' namespace
 #     port: 3000 # The port your service is listening on inside the cluster
 #     localPort: 3000 # The local port you want to access your app from (e.g., http://localhost:3000)

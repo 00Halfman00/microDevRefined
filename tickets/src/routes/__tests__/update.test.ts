@@ -1,8 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
-
-// this is a test for updating a ticket
+import { natsWrapper } from '../../nats-wrapper';
 
 const generateTicket = () => {
   return request(app)
@@ -121,3 +120,30 @@ describe('PUT /api/tickets/:id', () => {
     });
   });
 });
+
+describe('PUT /api/tickets/:id', () => {
+  it('publishes an event', async () => {
+    const cookie = global.signupGetCookie();
+    const resp1 = await request(app)
+      .post('/api/tickets')
+      .set('Cookie', cookie)
+      .send({
+        title: 'Test Ticket',
+        price: 35.99,
+      })
+      .expect(201);
+
+    const resp2 = await request(app)
+      .put(`/api/tickets/${resp1.body.id}`)
+      .set('Cookie', cookie) // no cookie, not signed in
+      .send({
+        title: 'Updated Ticket',
+        price: 45.99,
+      })
+      .expect(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+  });
+});
+
+// --- IGNORE ---
